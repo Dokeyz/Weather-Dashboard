@@ -55,6 +55,31 @@ function UVIndex(ln,lt){
                 $(currentUvindex).html(response.value);
             });
 }
+//Function for the five day forecast
+function forecast(cityid){
+    //Link for 5 day forecast
+    var queryforcastURL="https://api.openweathermap.org/data/2.5/forecast?id="+cityid+"&appid="+APIKey;
+    //Create HTML request for 5 day forecast
+    $.ajax({
+        url:queryforcastURL,
+        //get method to retrieve data from server
+        method:"GET"
+    }).then(function(response){
+        //for loop for 5 day forecast
+        for (i=0;i<5;i++){
+            var date= new Date((response.list[((i+1)*8)-1].dt)*1000).toLocaleDateString();
+            var tempKelvin= response.list[((i+1)*8)-1].main.temp;
+            //convert temperature to farenheit
+            var tempFarenheit=(((tempKelvin-273.5)*1.80)+32).toFixed(2);
+            var humidity= response.list[((i+1)*8)-1].main.humidity;
+            //Update the date, temp, and humidity
+            $("#fDate"+i).html(date);
+            $("#fTemp"+i).html(tempFarenheit+"&#8457");
+            $("#fHumidity"+i).html(humidity+"%");
+        }
+        
+    });
+}
 
 //Click Handler
 $("#search-button").on("click",displayWeather);
