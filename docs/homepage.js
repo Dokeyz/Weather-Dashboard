@@ -32,3 +32,29 @@ function currentWeather(city){
 
     });
 }
+
+// Display the current and future weather.
+function displayWeather(event){
+    event.preventDefault();
+    if(searchCity.val().trim()!==""){
+        city=searchCity.val().trim();
+        currentWeather(city);
+    }
+}
+
+    //Reference the key again for the UV index specifically
+function UVIndex(ln,lt){
+    //URL for UV Index
+    var uvIndexURL="https://api.openweathermap.org/data/2.5/uvi?appid="+ APIKey+"&lat="+lt+"&lon="+ln;
+    //Create HTML request for UV Index
+    $.ajax({
+            url:uvIndexURL,
+            //get method to retrieve data from server
+            method:"GET"
+            }).then(function(response){
+                $(currentUvindex).html(response.value);
+            });
+}
+
+//Click Handler
+$("#search-button").on("click",displayWeather);
